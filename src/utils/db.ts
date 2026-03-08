@@ -52,9 +52,22 @@ export function getDB() {
 
 // Helper methods
 
+// Fallback for crypto.randomUUID in non-secure contexts
+function generateUUID() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+    // Simple fallback using Math.random
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        const r = (Math.random() * 16) | 0;
+        const v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}
+
 export async function addDeck(name: string) {
     const db = await getDB();
-    const deck: Deck = { id: crypto.randomUUID(), name, createdAt: Date.now() };
+    const deck: Deck = { id: generateUUID(), name, createdAt: Date.now() };
     await db.put('decks', deck);
     return deck;
 }
@@ -67,7 +80,7 @@ export async function getDecks() {
 export async function addCard(deckId: string, front: string, back: string) {
     const db = await getDB();
     const card: Flashcard = {
-        id: crypto.randomUUID(),
+        id: generateUUID(),
         deckId,
         front,
         back,
