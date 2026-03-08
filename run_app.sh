@@ -42,6 +42,6 @@ else
 fi
 
 # 3. 启动
-echo "${BLUE}✨ 正在为您开启化学闪卡 (端口: $PORT)...${NC}"
-# 使用 --port 强制指定 8888
-npm run dev -- --port $PORT --open
+echo "${BLUE}✨ 正在为您开启化学闪卡 (端口: $PORT, 允许外部访问)...${NC}"
+# 使用 --port 强制指定 8888, --host 允许外部访问
+npm run dev -- --port $PORT --host 0.0.0.0 --open
